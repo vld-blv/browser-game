@@ -1,4 +1,6 @@
-const $btn = document.getElementById('btn-kick');
+const $btnKick = document.getElementById('btn-kick');
+const $btnWhip = document.getElementById('btn-whip');
+
 const character = {
     name: 'Pikachu',
     defaultHP: 100,
@@ -17,10 +19,15 @@ const enemy = {
 
 };
 
-$btn.addEventListener('click', () => {
+$btnKick.addEventListener('click', () => {
     console.log('Kick');
     changeHP(random(25), character);
     changeHP(random(25), enemy);
+});
+
+$btnWhip.addEventListener('click', () => {
+    console.log('Whip');
+    changeHP(random(10), enemy);
 });
 
 function init() {
@@ -48,7 +55,8 @@ function changeHP(count, person) {
     if (person.damageHP < count) {
         person.damageHP = 0;
         alert(`Бедный ${person.name} проиграл бой :(`);
-        $btn.disabled = true;
+        $btnKick.disabled = true;
+        $btnWhip.disabled = true;
     } else person.damageHP -= count;
 
     renderHP(person);

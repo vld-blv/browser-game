@@ -42,6 +42,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .playground {
@@ -272,6 +273,7 @@ body {
     border-radius: 10px;
     min-height: 30px;
     vertical-align: middle;
+    margin: 10px;
     padding: 12px 20px;
     outline: none !important;
     cursor: pointer;
