@@ -11,6 +11,7 @@ const character = {
   renderHPLife: renderHPLife,
   renderProgressBarHP: renderProgressBarHP,
   renderHP: renderHP,
+  changeHP: changeHP,
 
 };
 
@@ -24,18 +25,19 @@ const enemy = {
   renderHPLife: renderHPLife,
   renderProgressBarHP: renderProgressBarHP,
   renderHP: renderHP,
+  changeHP: changeHP,
 
 };
 
 $btnKick.addEventListener('click', () => {
   console.log('Kick');
-  changeHP(random(25), character);
-  changeHP(random(25), enemy);
+  character.changeHP(random(25));
+  enemy.changeHP(random(25));
 });
 
 $btnWhip.addEventListener('click', () => {
   console.log('Whip');
-  changeHP(random(10), enemy);
+  enemy.changeHP(random(10));
 });
 
 function init() {
@@ -57,15 +59,15 @@ function renderHP() {
   this.renderProgressBarHP();
 }
 
-function changeHP(count, person) {
-  if (person.damageHP < count) {
-    person.damageHP = 0;
-    alert(`Бедный ${person.name} проиграл бой :(`);
+function changeHP(count) {
+  if (this.damageHP < count) {
+    this.damageHP = 0;
+    alert(`Бедный ${this.name} проиграл бой :(`);
     $btnKick.disabled = true;
     $btnWhip.disabled = true;
-  } else person.damageHP -= count;
+  } else this.damageHP -= count;
 
-  person.renderHP();
+  this.renderHP();
 }
 
 function random(num) {
