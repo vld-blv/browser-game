@@ -60,12 +60,14 @@ function renderHP() {
 }
 
 function changeHP(count) {
-  if (this.damageHP < count) {
+  this.damageHP -= count;
+
+  if (this.damageHP <= count) {
     this.damageHP = 0;
     alert(`Бедный ${this.name} проиграл бой :(`);
     $btnKick.disabled = true;
     $btnWhip.disabled = true;
-  } else this.damageHP -= count;
+  }
 
   this.renderHP();
 }
