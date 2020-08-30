@@ -82,16 +82,16 @@ function renderHP() {
   this.renderProgressBarHP();
 }
 
-function changeHP(counter) {
-  this.damageHP -= counter;
+function changeHP(count) {
+  this.damageHP -= count;
 
-  const log = this === enemy ? generateLog(this, character, counter) : generateLog(this, enemy, counter);
+  const log = this === enemy ? generateLog(this, character, count) : generateLog(this, enemy, count);
 
   const $p = document.createElement('p');
   $p.innerText = log;
   $logs.insertBefore($p, $logs.children[0]);
 
-  if (this.damageHP <= counter) {
+  if (this.damageHP <= count) {
     this.damageHP = 0;
     alert(`Бедный ${this.name} проиграл бой :(`);
     $btnKick.disabled = true;
@@ -104,7 +104,7 @@ function random(num) {
   return Math.ceil(Math.random() * num);
 }
 
-function generateLog(firstPerson, secondPerson, counter) {
+function generateLog(firstPerson, secondPerson, count) {
   const {name: name1, defaultHP, damageHP} = firstPerson;
   const {name: name2} = secondPerson;
 
@@ -120,7 +120,7 @@ function generateLog(firstPerson, secondPerson, counter) {
     `${name1} расстроился, как вдруг, неожиданно ${name2} случайно влепил стопой в живот соперника.`,
     `${name1} пытался что-то сказать, но вдруг, неожиданно ${name2} со скуки разбил бровь сопернику.`,
   ];
-  return `${logs[random(logs.length - 1)]} -${counter} [${damageHP}/${defaultHP}]`;
+  return `${logs[random(logs.length - 1)]} -${count} [${damageHP}/${defaultHP}]`;
 }
 
 init();
