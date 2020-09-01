@@ -1,5 +1,9 @@
-const $btnKick = document.getElementById(`btn-kick`);
-const $btnWhip = document.getElementById(`btn-whip`);
+function $getElById(id) {
+  return document.getElementById(id);
+}
+
+const $btnKick = $getElById(`btn-kick`);
+const $btnWhip = $getElById(`btn-whip`);
 
 const $logs = document.querySelector('#logs');
 
@@ -8,8 +12,8 @@ const character = {
   name: `Pikachu`,
   defaultHP: 300,
   damageHP: 300,
-  elHP: document.getElementById(`health-character`),
-  elProgressBar: document.getElementById(`progressbar-character`),
+  elHP: $getElById(`health-character`),
+  elProgressBar: $getElById(`progressbar-character`),
 
   renderHPLife: renderHPLife,
   renderProgressBarHP: renderProgressBarHP,
@@ -22,8 +26,8 @@ const enemy = {
   name: `Charmander`,
   defaultHP: 300,
   damageHP: 300,
-  elHP: document.getElementById(`health-enemy`),
-  elProgressBar: document.getElementById(`progressbar-enemy`),
+  elHP: $getElById(`health-enemy`),
+  elProgressBar: $getElById(`progressbar-enemy`),
 
   renderHPLife: renderHPLife,
   renderProgressBarHP: renderProgressBarHP,
@@ -32,15 +36,31 @@ const enemy = {
 
 };
 
+function countClick(){
+  let counter = 0;
+  return function(button, maxClickCount = 6){
+    counter += 1;
+    console.log(`Использований умения ${button.text || button.innerText}: ${counter}`);  
+    button.text = button.text || button.innerText;
+
+    button.innerText = `${button.text} [${maxClickCount - counter}]`; 
+
+    if (counter >= maxClickCount) button.disabled = true;
+  }
+}
+
+const kickCount = countClick();
+const whipCount = countClick();
+
 $btnKick.addEventListener(`click`, () => {
-  console.log(`Kick`);
   character.changeHP(random(25));
   enemy.changeHP(random(25));
+  kickCount($btnKick);
 });
 
 $btnWhip.addEventListener(`click`, () => {
-  console.log(`Whip`);
   enemy.changeHP(random(10));
+  whipCount($btnWhip, 10);
 });
 
 function init() {
@@ -62,15 +82,18 @@ function renderHP() {
   this.renderProgressBarHP();
 }
 
-function changeHP(count) {
-  this.damageHP -= count;
-
-  const log = this === enemy ? generateLog(this, character, count) : generateLog(this, enemy, count);
-  console.log(log);
+function addLog(person, count) {
+  const log = person === enemy ? generateLog(person, character, count) : generateLog(person, enemy, count);
 
   const $p = document.createElement('p');
   $p.innerText = log;
   $logs.insertBefore($p, $logs.children[0]);
+}
+
+function changeHP(count) {
+  this.damageHP -= count;
+
+  addLog(this, count);
 
   if (this.damageHP <= count) {
     this.damageHP = 0;
