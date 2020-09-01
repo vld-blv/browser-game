@@ -82,7 +82,9 @@ function renderHP() {
   this.renderProgressBarHP();
 }
 
-function addLog(log) {
+function addLog(person, count) {
+  const log = person === enemy ? generateLog(person, character, count) : generateLog(person, enemy, count);
+
   const $p = document.createElement('p');
   $p.innerText = log;
   $logs.insertBefore($p, $logs.children[0]);
@@ -91,9 +93,7 @@ function addLog(log) {
 function changeHP(count) {
   this.damageHP -= count;
 
-  const log = this === enemy ? generateLog(this, character, count) : generateLog(this, enemy, count);
-
-  addLog(log);
+  addLog(this, count);
 
   if (this.damageHP <= count) {
     this.damageHP = 0;
