@@ -77,7 +77,7 @@ function addLog(person, count) {
 */
 
 function generateLog(firstPerson, secondPerson, count) {
-  const {name: name1, current, total} = firstPerson;
+  const {name: name1, hp: { current, total } } = firstPerson;
   const {name: name2} = secondPerson;
 
   const logs = [
