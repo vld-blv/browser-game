@@ -1,40 +1,33 @@
+import Pokemon from './pokemon.js';
+import random from './utils.js';
+
+
+const character = new Pokemon ({
+  name: 'Pikachu',
+  hp: 300,
+  type: 'electric',
+  selectors: 'character',
+});
+
+const enemy = new Pokemon ({
+  name: 'Charmander',
+  hp: 350,
+  type: 'fire',
+  selectors: 'enemy',
+});
+
+console.log(character);
+console.log(enemy);
+
 function $getElById(id) {
   return document.getElementById(id);
 }
+
 
 const $btnKick = $getElById(`btn-kick`);
 const $btnWhip = $getElById(`btn-whip`);
 
 const $logs = document.querySelector('#logs');
-
-
-const character = {
-  name: `Pikachu`,
-  defaultHP: 300,
-  damageHP: 300,
-  elHP: $getElById(`health-character`),
-  elProgressBar: $getElById(`progressbar-character`),
-
-  renderHPLife: renderHPLife,
-  renderProgressBarHP: renderProgressBarHP,
-  renderHP: renderHP,
-  changeHP: changeHP,
-
-};
-
-const enemy = {
-  name: `Charmander`,
-  defaultHP: 300,
-  damageHP: 300,
-  elHP: $getElById(`health-enemy`),
-  elProgressBar: $getElById(`progressbar-enemy`),
-
-  renderHPLife: renderHPLife,
-  renderProgressBarHP: renderProgressBarHP,
-  renderHP: renderHP,
-  changeHP: changeHP,
-
-};
 
 function countClick(){
   let counter = 0;
@@ -49,39 +42,31 @@ function countClick(){
   }
 }
 
+
 const kickCount = countClick();
 const whipCount = countClick();
 
 $btnKick.addEventListener(`click`, () => {
-  character.changeHP(random(25));
-  enemy.changeHP(random(25));
-  kickCount($btnKick);
+  character.changeHP(random(100), function(count) {
+    //console.log('hello', count);
+    console.log(generateLog(character, enemy, count));
+  });
+  enemy.changeHP(random(25), function(count) {
+    //console.log('hello', count);
+    console.log(generateLog(enemy, character, count));
+  });
+  kickCount($btnKick, 50);
 });
 
 $btnWhip.addEventListener(`click`, () => {
-  enemy.changeHP(random(10));
+  enemy.changeHP(random(10), function(count) {
+    //console.log('hello', count);
+    console.log(generateLog(enemy, character, count));
+  });
   whipCount($btnWhip, 10);
 });
 
-function init() {
-  console.log(`Start Game!`);
-  character.renderHP();
-  enemy.renderHP();
-}
-
-function renderHPLife() {
-  this.elHP.innerText = this.damageHP + ` / ` + this.defaultHP;
-}
-
-function renderProgressBarHP() {
-  this.elProgressBar.style.width = this.damageHP / this.defaultHP * 100 + `%`;
-}
-
-function renderHP() {
-  this.renderHPLife();
-  this.renderProgressBarHP();
-}
-
+/*
 function addLog(person, count) {
   const log = person === enemy ? generateLog(person, character, count) : generateLog(person, enemy, count);
 
@@ -89,27 +74,10 @@ function addLog(person, count) {
   $p.innerText = log;
   $logs.insertBefore($p, $logs.children[0]);
 }
-
-function changeHP(count) {
-  this.damageHP -= count;
-
-  addLog(this, count);
-
-  if (this.damageHP <= count) {
-    this.damageHP = 0;
-    alert(`Бедный ${this.name} проиграл бой :(`);
-    $btnKick.disabled = true;
-    $btnWhip.disabled = true;
-  }
-  this.renderHP();
-}
-
-function random(num) {
-  return Math.ceil(Math.random() * num);
-}
+*/
 
 function generateLog(firstPerson, secondPerson, count) {
-  const {name: name1, defaultHP, damageHP} = firstPerson;
+  const {name: name1, hp: { current, total } } = firstPerson;
   const {name: name2} = secondPerson;
 
   const logs = [
@@ -124,7 +92,5 @@ function generateLog(firstPerson, secondPerson, count) {
     `${name1} расстроился, как вдруг, неожиданно ${name2} случайно влепил стопой в живот соперника.`,
     `${name1} пытался что-то сказать, но вдруг, неожиданно ${name2} со скуки разбил бровь сопернику.`,
   ];
-  return `${logs[random(logs.length - 1)]} -${count} [${damageHP}/${defaultHP}]`;
+  return `${logs[random(logs.length - 1)]} -${count} [${current}/${total}]`;
 }
-
-init();
