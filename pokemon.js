@@ -26,7 +26,7 @@ class Pokemon extends Selectors {
   }
   
   renderName = () => this.elName.innerText = this.name;
-  renderImg = () => this.elImg = this.img;
+  renderImg = () => this.elImg.src = this.img;
 
   changeHP = (count, cb) => {
     this.hp.current -= count;
