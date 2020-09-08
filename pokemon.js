@@ -1,9 +1,12 @@
+import { random } from './utils.js';
+
 class Selectors {
   constructor(name) {
     this.elHP = document.getElementById(`health-${name}`);
     this.elProgressBar = document.getElementById(`progressbar-${name}`);
     this.elName = document.getElementById(`name-${name}`);
     this.elImg = document.getElementById(`img-${name}`);
+    this.selector = name;
   }
 };
 
@@ -50,9 +53,22 @@ class Pokemon extends Selectors {
   }
 
   renderProgressBarHP = () => {
-    const { elProgressBar, hp:{ total, current } } = this;  
-    elProgressBar.style.width = current / total * 100 + `%`;
+    const { elProgressBar, hp:{ total, current } } = this;
+    const percent = current / total * 100;
+    elProgressBar.style.width = percent + `%`;
   }
 };
 
-export default Pokemon;
+function getPokemon(selector, pokemons) {
+  const pokemon = pokemons[random(pokemons.length) - 1];
+ 
+  return new Pokemon({
+      ...pokemon,
+      selectors: selector,
+  });
+}
+
+export {
+  Pokemon,
+  getPokemon,
+};
