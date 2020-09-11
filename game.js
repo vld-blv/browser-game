@@ -13,10 +13,11 @@ class Game {
     this.startGame();
   }
 
-  startGame = () => {
+  async startGame() {
     deleteBtns();
 
-    this.availablePlayers = pokemons.slice();
+    const responce = await fetch ('https://reactmarathon-api.netlify.app/api/pokemons');
+    this.availablePlayers = await responce.json();
     this.player1 = getPokemon('player1', this.availablePlayers);
     this.player2 = getPokemon('player2', this.availablePlayers);
     this.killCount = 0;
@@ -27,9 +28,9 @@ class Game {
       
       $btn.addEventListener('click', () => {
         clickCount();
-        this.generateLog(this.player2, this.player1, attack);
-        this.generateLog(this.player1, this.player2, this.player2.attacks[0]);
-        this.checkLosing();
+        this.generateLog(this.player1, this.player2, attack, () => {
+          this.checkLosing();
+        });
       });
     });
   }
@@ -66,10 +67,18 @@ class Game {
       }
   }
 
-  generateLog = (player1, player2, attack) => {
-      player1.changeHP(randomMinMax(attack.minDamage, attack.maxDamage), function(count) {
-          log.generateLog(player1, player2, count);
-      });
+  async generateLog(player1, player2, attack) {
+    const responce = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${player1.id}&attackId=${attack.id}&player2id=${player2.id}`);
+    const damage = await responce.json();
+
+    
+    player1.changeHP(damage.kick.player2, function(count) {
+      log.generateLog(player1, player2, count);
+    });
+
+    player2.changeHP(damage.kick.player1, function(count) {
+      log.generateLog(player2, player1, count);
+    });
   }
 }
 

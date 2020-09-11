@@ -28,10 +28,14 @@ class Pokemon extends Selectors {
     this.renderHP();
   }
   
-  renderName = () => this.elName.innerText = this.name;
-  renderImg = () => this.elImg.src = this.img;
+  renderName() {
+    this.elName.innerText = this.name;
+  }
+  renderImg() {
+    this.elImg.src = this.img;
+  }
 
-  changeHP = (count, cb) => {
+  changeHP(count, cb) {
     this.hp.current -= count;
   
     if (this.hp.current <= count) {
@@ -42,20 +46,24 @@ class Pokemon extends Selectors {
     cb && cb(count);
   }
 
-  renderHP = () => {
+  renderHP() {
     this.renderHPLife();
     this.renderProgressBarHP();
   }
 
-  renderHPLife = () => {
+  renderHPLife() {
     const { elHP, hp: { total, current } } = this;
     elHP.innerText = current + '/' + total;
   }
 
-  renderProgressBarHP = () => {
+  renderProgressBarHP() {
     const { elProgressBar, hp:{ total, current } } = this;
     const percent = current / total * 100;
     elProgressBar.style.width = percent + `%`;
+    /*
+    if ((percent <= 60)&&(percent > 20)) elProgressbar.classList.add('low');
+    else if (percent <= 20) elProgressbar.classList.add('critical');
+    */
   }
 };
 
