@@ -28,7 +28,7 @@ class Game {
       
       $btn.addEventListener('click', () => {
         clickCount();
-        this.generateLog(this.player1, this.player2, attack, () => {
+        this.doDmg(this.player1, this.player2, attack, () => {
           this.checkLosing();
         });
       });
@@ -67,7 +67,7 @@ class Game {
       }
   }
 
-  async generateLog(player1, player2, attack) {
+  async doDmg(player1, player2, attack) {
     const responce = await fetch(`https://reactmarathon-api.netlify.app/api/fight?player1id=${player1.id}&attackId=${attack.id}&player2id=${player2.id}`);
     const damage = await responce.json();
 
