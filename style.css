@@ -474,3 +474,13 @@ h1 {
 .action label {
     padding: 6px 0;
 }
+
+#logs {
+    font-size: 16px;
+    font-weight: 300;
+    color: black;
+    margin: 5px 0;
+    display: inline-block;
+    overflow: auto;
+    height: 400px;
+}
