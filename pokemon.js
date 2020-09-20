@@ -1,4 +1,4 @@
-import { random } from './utils.js';
+import random from './utils.js';
 
 class Selectors {
   constructor(name) {
@@ -39,7 +39,7 @@ class Pokemon extends Selectors {
   changeHP(count, cb) {
     this.hp.current -= count;
   
-    if (this.hp.current <= count) {
+    if (this.hp.current <= 0) {
       this.hp.current = 0;
     }
 
@@ -50,34 +50,30 @@ class Pokemon extends Selectors {
   renderHP() {
     this.renderHPLife();
     this.renderProgressBarHP();
-  }
+   }
 
-  renderHPLife() {
+   renderHPLife() {
     const { elHP, hp: { total, current } } = this;
     elHP.innerText = current + '/' + total;
-  }
+   }
 
-  renderProgressBarHP() {
+   renderProgressBarHP() {
     const { elProgressBar, hp:{ total, current } } = this;
     const percent = current / total * 100;
     elProgressBar.style.width = percent + `%`;
-    /*
-    if ((percent <= 60)&&(percent > 20)) elProgressbar.classList.add('low');
-    else if (percent <= 20) elProgressbar.classList.add('critical');
-    */
-  }
+    if ((percent <= 60)&&(percent > 20)) elProgressBar.classList.add('low');
+    else if (percent <= 20) elProgressBar.classList.add('critical');
+    else elProgressBar.classList.remove('low', 'critical')
+   }
 };
 
 function getPokemon(selector, pokemons) {
-  const pokemon = pokemons[random(pokemons.length) - 1];
+  const pokemon = pokemons.splice(random(pokemons.length - 1), 1)[0];
  
   return new Pokemon({
-      ...pokemon,
-      selectors: selector,
+    ...pokemon,
+    selectors: selector,
   });
 }
 
-export {
-  Pokemon,
-  getPokemon,
-};
+export default getPokemon;
