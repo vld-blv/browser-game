@@ -8,17 +8,17 @@ function makeBtn(btnText) {
   return $btn;
 }
 
-function countClick (maxCount, btn) {
+function countClick(maxCount, btn) {
   const innerText = btn.innerText;
   btn.innerText = `${innerText} (${maxCount})`;
   return function() {
     maxCount -= 1;
     btn.innerText = `${innerText} (${maxCount})`;
     if (maxCount <= 0) btn.disabled = true;
-  }
+  };
 }
 
-function deleteBtns () {
+function deleteBtns() {
   const $allButtons = document.querySelectorAll('.control .button');
   $allButtons.forEach((item) => item.remove());
 }

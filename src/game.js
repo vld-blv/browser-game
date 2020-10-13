@@ -1,9 +1,9 @@
 import getPokemon from './pokemon.js';
-import {makeBtn, countClick, deleteBtns} from './buttons.js';
+import { makeBtn, countClick, deleteBtns } from './buttons.js';
 import * as log from './logs.js';
 
 class Game {
-  constructor () {
+  constructor() {
     this.player1;
     this.player2;
     this.killCount;
@@ -14,16 +14,16 @@ class Game {
   async startGame() {
     deleteBtns();
 
-    const responce = await fetch ('https://reactmarathon-api.netlify.app/api/pokemons');
+    const responce = await fetch('https://reactmarathon-api.netlify.app/api/pokemons');
     this.availablePlayers = await responce.json();
     this.player1 = getPokemon('player1', this.availablePlayers);
     this.player2 = getPokemon('player2', this.availablePlayers);
     this.killCount = 0;
 
-    this.player1.attacks.forEach(attack => {
+    this.player1.attacks.forEach((attack) => {
       const $btn = makeBtn(`${attack.name}`);
       const clickCount = countClick(attack.maxCount, $btn);
-      
+
       $btn.addEventListener('click', () => {
         clickCount();
         this.doDmg(this.player1, this.player2, attack, () => {
@@ -38,7 +38,7 @@ class Game {
     log.endGame(this.killCount);
 
     const $btn = makeBtn('New Game');
-  
+
     $btn.addEventListener('click', () => {
       log.clear();
       this.startGame();
@@ -47,7 +47,7 @@ class Game {
 
   checkLosing() {
     const { player1, player2 } = this;
-      
+
     if (player1.hp.current === 0 && player2.hp.current === 0) {
       log.draw();
       this.restartGame();
